@@ -1,5 +1,5 @@
 ### SDS-EDTA data analysis
-
+install.packages(“growthcurver”)
 library(tidyverse)
 library(growthcurver)
 
@@ -79,3 +79,76 @@ growth_curve_2mM <- ggplot(data2_clean) +
   labs(colour = 'Strain') +
   geom_errorbar(aes(x = time, ymin = od-sd, ymax = od+sd))
 growth_curve_2mM
+
+library(tidyverse)
+
+head(gc_rename)
+kruskal.test(auc_l ~ sample, data = gc_rename)
+
+install.packages("FSA")
+library(FSA)
+dunn_result <- dunnTest(auc_l ~ sample, 
+                        data = gc_rename, 
+                        method = "bh")  # Adjusts for multiple comparisons
+print(dunn_result)
+library(ggsignif)
+
+
+library(ggplot2)
+AUC_Strains <- ggplot(gc_rename, aes(x = sample, y = auc_l)) +
+  geom_boxplot() +
+  geom_jitter(width = 0.2, alpha = 0.6, color = "blue") +  # Shows replicates
+  labs(title = "AUC Across Strains", x = "", y = "AUC")
+AUC_Strains
+
+significant_pairs <- list(c("TropiniBrkA", "WT"))  # The only pair with P.adj < 0.05
+
+
+messing_around <- ggplot(gc_rename, aes(x = sample, y = auc_l)) +
+  
+  geom_boxplot(
+    width = 0.6,                # Width of boxes
+    outlier.shape = NA,         
+    color = "black",            # Border color
+    fill = "gray90",            # Fill color
+    alpha = 0.7,                # Transparency
+    lwd = 0.5                   #
+  ) +
+  
+  geom_signif(
+    comparisons = significant_pairs,
+    annotations = "*",  # Or "p = 0.030" for exact value
+    tip_length = 0.01,  # Length of the horizontal bars
+    textsize = 5,       # Size of the asterisk
+    vjust = -0.5,       # Vertical adjustment of the label
+    y_position = max(gc_rename$auc_l) * 1.1  # Position above highest point
+  ) +
+  geom_jitter(
+    width = 0.15,               
+    height = 0,                 
+    alpha = 0.7,                # Slightly more opaque
+    size = 2.5,                 # Larger points
+    color = "#3575b5"           # Nice blue color
+  ) +
+  
+  # Axis and labels
+  labs(
+    y = "Area Under the Curve (AUC)", 
+    x = NULL
+  ) +
+  
+  
+  theme_minimal(base_size = 12) +
+  theme(
+    panel.grid.major.x = element_blank(),   
+    panel.border = element_rect(fill = NA, color = "black", linewidth = 0.5), # Add border
+    axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1, size = 11), # Rotated x-labels
+    axis.text.y = element_text(size = 11),
+    axis.title.y = element_text(size = 12, margin = margin(r = 10)),
+    plot.margin = margin(10, 10, 10, 10)     # Adjust plot margins
+  ) +
+  
+  # Consistent y-axis expansion
+  scale_y_continuous(expand = expansion(mult = c(0.05, 0.1)))
+messing_around
+
