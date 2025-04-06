@@ -14,6 +14,16 @@ library(ggsignif)
 data2 <- read_csv('all growth curves - 2mM.csv')
 colnames(data2)[1] <- 'time'
 
+#set up plot aesthetics - keep consistent across plots
+x_order <- c("WT", "WTBrkA", "Oliver", 
+             "OliverBrkA", "Tropini", "TropiniBrkA")
+x_names <- c("WT" = "BW25113", "WTBrkA" = "BW25113+pPALMC1", 
+             "Oliver" =  "JW0052-O", "OliverBrkA" = "JW0052-O+pPALMC1",
+             "Tropini" =  "JW0052-T", "TropiniBrkA" = "JW0052-T+pPALMC1")
+colours <-c("WT" = "navyblue", "WTBrkA" = "cyan",
+            "Oliver" = "orange", "OliverBrkA" = "yellow",
+            "Tropini" = "maroon", "TropiniBrkA" = "red")
+
 #calculate technical replicate averages to get biological replicates
 data2_bioreps <- data2 |>
   group_by(time) |>
@@ -65,9 +75,7 @@ data2_clean <- full_join(data2_avg_clean, data2_sd) |>
   select(!(n:strain_sd))
 
 #reorder data by strain
-data2_clean$strain <- factor(data2_clean$strain , levels=c("WT", "WTBrkA", 
-                                                           "Oliver", "OliverBrkA", 
-                                                           "Tropini", "TropiniBrkA"))
+data2_clean$strain <- factor(data2_clean$strain , levels = x_order)
 
 #playing around with Growthcurver
 gc_bioreps <- SummarizeGrowthByPlate(data2_bioreps)
@@ -87,16 +95,7 @@ print(dunn_result)
 significant_pairs <- list(c("TropiniBrkA", "WT"))  
 
 #reorder data by strain
-gc_rename$sample <- factor(gc_rename$sample , levels=c("WT", "WTBrkA", "Oliver", 
-                                                       "OliverBrkA", "Tropini", "TropiniBrkA"))
-
-#set up plot aesthetics - keep consistent across plots
-x_names <- c("WT" = "BW25113", "WTBrkA" = "BW25113+pPALMC1", 
-            "Oliver" =  "JW0052-O", "OliverBrkA" = "JW0052-O+pPALMC1",
-            "Tropini" =  "JW0052-T", "TropiniBrkA" = "JW0052-T+pPALMC1")
-colours <-c("WT" = "navyblue", "WTBrkA" = "cyan",
-            "Oliver" = "orange", "OliverBrkA" = "yellow",
-            "Tropini" = "maroon", "TropiniBrkA" = "red")
+gc_rename$sample <- factor(gc_rename$sample , levels = x_order)
 
 #plot AUC
 #TODO: figure out how to re-order the legend labels. I factored it and the
@@ -131,7 +130,7 @@ auc_2mM <- ggplot(gc_rename, aes(x = sample, y = auc_l, fill = sample)) +
     fill = "Strain"
   ) +
   scale_y_continuous(expand = expansion(mult = c(0.05, 0.1))) +
-  scale_fill_manual(breaks = sample,
+  scale_fill_manual(breaks = x_order,
                     values = colours,
                     labels = x_names) +
   
