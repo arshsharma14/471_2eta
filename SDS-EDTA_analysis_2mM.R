@@ -154,6 +154,5 @@ growth_curve_2mM <- ggplot(data2_clean) +
   ylab('Optical density at 600nm') +
   labs(colour = 'Strain') +
   scale_colour_discrete(type = colours,
-                        labels = x_names) #+ #commented out because it clutters the plot
-  #geom_errorbar(aes(x = time, ymin = od-sd, ymax = od+sd)) 
+                        labels = x_names)
 growth_curve_2mM
