@@ -1,4 +1,4 @@
-### SDS-EDTA data analysis - 0.2mM EDTA
+### positive control growth curves
 
 #install and load necessary packages
 #install.packages('tidyverse') #uncomment if not installed
@@ -10,94 +10,89 @@ library(growthcurver)
 library(FSA)
 library(ggsignif)
 
+#set up plot aesthetics - keep consistent across plots
+x_order <- c("WT", "WTBrkA", "Oliver", "OliverBrkA", "Tropini", "TropiniBrkA")
+x_names <- c("WT" = "BW25113", "WTBrkA" = "BW25113+pPALMC1", 
+             "Oliver" =  "JW0052-O", "OliverBrkA" = "JW0052-O+pPALMC1",
+             "Tropini" =  "JW0052-T", "TropiniBrkA" = "JW0052-T+pPALMC1")
+colours <-c("WT" = "navyblue", "WTBrkA" = "cyan",
+            "Oliver" = "orange", "OliverBrkA" = "yellow",
+            "Tropini" = "maroon", "TropiniBrkA" = "red")
+
 #read data at 2mM EDTA
-data2 <- read_csv('0.2mM EDTA/all growth curves - 2mM.csv')
-colnames(data2)[1] <- 'time'
+pc <- read_csv('positive control/all growth curves - PC.csv')
 
 #calculate technical replicate averages to get biological replicates
-data2_bioreps <- data2 |>
+pc_bioreps <- pc |>
   group_by(time) |>
   summarize(WT1 = mean(WT1.1:WT1.3), 
-          WT2 = mean(WT2.1:WT2.2), 
-          WT3 = mean(WT3.1:WT3.2), 
-          WTBrkA1 = mean(WTBrkA1.1:WTBrkA1.3), 
-          WTBrkA2 = mean(WTBrkA2.1:WTBrkA2.2), 
-          WTBrkA3 = mean(WTBrkA3.1:WTBrkA3.2), 
-          Oliver1 = mean(Oliver1.1:Oliver1.2), 
-          Oliver2 = mean(Oliver2.1:Oliver2.2), 
-          OliverBrkA1 = mean(OliverBrkA1.1:OliverBrkA1.2),
-          OliverBrkA2 = mean(OliverBrkA2.1:OliverBrkA2.2), 
-          Tropini1 = mean(Tropini1.1:Tropini1.3),
-          Tropini2 = mean(Tropini2.1:Tropini2.2), 
-          Tropini3 = mean(Tropini3.1:Tropini3.2),
-          TropiniBrkA1 = mean(TropiniBrkA1.1:TropiniBrkA1.3), 
-          TropiniBrkA2 = mean(TropiniBrkA2.1:TropiniBrkA2.2),
-          TropiniBrkA3 = mean(TropiniBrkA3.1:TropiniBrkA3.2))
+            WT2 = mean(WT2.1:WT2.2), 
+            WT3 = mean(WT3.1:WT3.2), 
+            WTBrkA1 = mean(WTBrkA1.1:WTBrkA1.3), 
+            WTBrkA2 = mean(WTBrkA2.1:WTBrkA2.2), 
+            WTBrkA3 = mean(WTBrkA3.1:WTBrkA3.2), 
+            Oliver1 = mean(Oliver1.1:Oliver1.2), 
+            Oliver2 = mean(Oliver2.1:Oliver2.2), 
+            OliverBrkA1 = mean(OliverBrkA1.1:OliverBrkA1.2),
+            OliverBrkA2 = mean(OliverBrkA2.1:OliverBrkA2.2), 
+            Tropini1 = mean(Tropini1.1:Tropini1.3),
+            Tropini2 = mean(Tropini2.1:Tropini2.2), 
+            Tropini3 = mean(Tropini3.1:Tropini3.2),
+            TropiniBrkA1 = mean(TropiniBrkA1.1:TropiniBrkA1.3), 
+            TropiniBrkA2 = mean(TropiniBrkA2.1:TropiniBrkA2.2),
+            TropiniBrkA3 = mean(TropiniBrkA3.1:TropiniBrkA3.2))
 
 #calculate biological replicate averages
-data2_avg <- data2_bioreps |>
+pc_avg <- pc_bioreps |>
   group_by(time) |>
   summarize(WT = mean(WT1:WT3),
             WTBrkA = mean(WTBrkA1:WTBrkA3),
             Oliver = mean(Oliver1:Oliver2),
             OliverBrkA = mean(OliverBrkA1:OliverBrkA2),
             Tropini = mean(Tropini1:Tropini3),
-            TropiniBrkA = mean(TropiniBrkA1:TropiniBrkA3)) 
-
-data2_avg_clean <- data2_avg |>
+            TropiniBrkA = mean(TropiniBrkA1:TropiniBrkA3)) |>
   gather(strain, od, -time) |>
   add_column(n = c(1:582)) #make column with unrepeated values for full_join to work
 
 #calculate standard deviations
-data2_sd <- data2_bioreps |>
+pc_sd <- pc_bioreps |>
   group_by(time) |>
   summarize(WT_sd = sd(c_across(WT1:WT3)),
-         WTBrkA_sd = sd(c_across(WTBrkA1:WTBrkA3)),
-         Oliver_sd = sd(c_across(Oliver1:Oliver2)),
-         OliverBrkA_sd = sd(c_across(OliverBrkA1:OliverBrkA2)),
-         Tropini_sd = sd(c_across(Tropini1:Tropini3)),
-         TropiniBrkA_sd = sd(c_across(TropiniBrkA1:TropiniBrkA3))) |>
+            WTBrkA_sd = sd(c_across(WTBrkA1:WTBrkA3)),
+            Oliver_sd = sd(c_across(Oliver1:Oliver2)),
+            OliverBrkA_sd = sd(c_across(OliverBrkA1:OliverBrkA2)),
+            Tropini_sd = sd(c_across(Tropini1:Tropini3)),
+            TropiniBrkA_sd = sd(c_across(TropiniBrkA1:TropiniBrkA3))) |>
   gather(strain_sd, sd, -time) |>
   add_column(n = c(1:582)) #make column with unrepeated values for full_join to work
 
 #join od and sd and make clean dataframe
-data2_clean <- full_join(data2_avg_clean, data2_sd) |>
+pc_clean <- full_join(pc_avg, pc_sd) |>
   select(!(n:strain_sd))
 
 #reorder data by strain
-data2_clean$strain <- factor(data2_clean$strain , levels = x_order)
+pc_clean$strain <- factor(pc_clean$strain , levels = x_order)
 
 #Growthcurver
-gc_bioreps <- SummarizeGrowthByPlate(data2_bioreps)
+gc_bioreps <- SummarizeGrowthByPlate(pc_bioreps)
 
 gc_rename <- mutate(gc_bioreps, sample = str_sub(sample, end = -2))
 
 #statistical analysis: Kruskal-Wallis and Dunn
 kruskal_result <- kruskal.test(auc_l ~ sample, data = gc_rename)
-print(kruskal_result)
+print(kruskal_result) #p=0.02
 
 dunn_result <- dunnTest(auc_l ~ sample, 
                         data = gc_rename, 
                         method = "bh")  # Adjusts for multiple comparisons
-print(dunn_result)
+print(dunn_result) #TropiniBrkA - WT p=0.04
 
-# The only pair with P.adj < 0.05
-significant_pairs <- list(c("TropiniBrkA", "WT"))  
+significant_pairs <- list(c("TropiniBrkA", "WT")) 
 
 #reorder data by strain
 gc_rename$sample <- factor(gc_rename$sample , levels = x_order)
 
-#set up plot aesthetics - keep consistent across plots
-x_order <- c("WT", "WTBrkA", "Oliver", "OliverBrkA", "Tropini", "TropiniBrkA")
-x_names <- c("WT" = "BW25113", "WTBrkA" = "BW25113+pPALMC1", 
-            "Oliver" =  "JW0052-O", "OliverBrkA" = "JW0052-O+pPALMC1",
-            "Tropini" =  "JW0052-T", "TropiniBrkA" = "JW0052-T+pPALMC1")
-colours <-c("WT" = "navyblue", "WTBrkA" = "cyan",
-            "Oliver" = "orange", "OliverBrkA" = "yellow",
-            "Tropini" = "maroon", "TropiniBrkA" = "red")
-
-#plot AUC
-auc_2mM <- ggplot(gc_rename, aes(x = sample, y = auc_l, fill = sample)) +
+auc_pc <- ggplot(gc_rename, aes(x = sample, y = auc_l, fill = sample)) +
   
   #boxplot  
   geom_boxplot(
@@ -111,7 +106,7 @@ auc_2mM <- ggplot(gc_rename, aes(x = sample, y = auc_l, fill = sample)) +
   #significance bar  
   geom_signif(
     comparisons = significant_pairs,
-    annotations = "*",  # Or "p = 0.030" for exact value
+    annotations = "*",  # Or "p = 0.040" for exact value
     tip_length = 0.05,  # Length of the horizontal bars
     textsize = 5,       # Size of the asterisk
     vjust = -0.5,       # Vertical adjustment of the label
@@ -140,14 +135,14 @@ auc_2mM <- ggplot(gc_rename, aes(x = sample, y = auc_l, fill = sample)) +
     axis.title.y = element_text(size = 12, margin = margin(r = 10)),
     plot.margin = margin(10, 10, 10, 10)     # Adjust plot margins
   ) 
-auc_2mM
+auc_pc
 
 #plot growth curves
-growth_curve_2mM <- ggplot(data2_clean) +
+growth_curve_pc <- ggplot(pc_clean) +
   geom_line(aes(x = time, y = od, colour = strain)) +
   xlab('Time (minutes)') +
   ylab('Optical density at 600nm') +
   labs(colour = 'Strain') +
   scale_colour_discrete(type = colours,
                         labels = x_names)
-growth_curve_2mM
+growth_curve_pc
