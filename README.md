@@ -1,6 +1,6 @@
 # Growth curve analysis for E. coli with BrkA expression
 
-This GitHub compiles the data and R scripts used to perform growth curve analysis for the purpose of reproducibility. See R script for detailed comments.
+This GitHub compiles the data and R scripts used to perform growth curve analysis and Western blot densitometry for the purpose of reproducibility. See R script for detailed comments.
 
 ## Abbreviations
 - WT: E. coli BW25113
@@ -22,6 +22,7 @@ Biological replicates and optimization performed as follows:
   - 2 technical replicates each
   - 0.01% SDS and gradient EDTA
 - 04Apr2025: same as above
+- 10Apr2025: same as above
 
 ## Data wrangling
 Biological replicates were compiled in Excel as follows:
@@ -29,21 +30,27 @@ Biological replicates were compiled in Excel as follows:
   1) 21Mar2025
   2) 27Mar2025
   3) 04Apr2025
+  4) 10Apr2025
 - Oliver:
   1) 27Mar2025
   2) 04Apr2025
+  3) 10Apr2025
 - Tropini:
   1) 21Mar2025
   2) 27Mar2025
   3) 04Apr2025
+  4) 10Apr2025
 - WTBrkA:
   1) 21Mar2025
   2) 27Mar2025
   3) 04Apr2025
+  4) 10Apr2025
 - OliverBrkA:
   1) 27Mar2025
   2) 04Apr2025
+  3) 10Apr2025
 - TropiniBrkA: (discard 04Apr2025 as outlier)
   1) 21Mar2025
   2) 27Mar2025
+  3) 10Apr2025
 Data was then loaded into R as .csv files and had subsequent analyses done.
