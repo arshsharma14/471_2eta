@@ -15,9 +15,9 @@ x_order <- c("WT", "WTBrkA", "Oliver", "OliverBrkA", "Tropini", "TropiniBrkA")
 x_names <- c("WT" = "BW25113", "WTBrkA" = "BW25113+pPALMC1", 
              "Oliver" =  "JW0052-O", "OliverBrkA" = "JW0052-O+pPALMC1",
              "Tropini" =  "JW0052-T", "TropiniBrkA" = "JW0052-T+pPALMC1")
-colours <-c("WT" = "navyblue", "WTBrkA" = "cyan",
-            "Oliver" = "orange", "OliverBrkA" = "yellow",
-            "Tropini" = "maroon", "TropiniBrkA" = "red")
+colours <-c("WT" = "#009E73", "WTBrkA" = "#56B4E9",
+            "Oliver" = "#E69F00", "OliverBrkA" = "#D55E00",
+            "Tropini" = "#CC79A7", "TropiniBrkA" = "#0072B2")
 
 #read data at 2mM EDTA
 data2 <- read_csv('0.2mM EDTA/all growth curves - 0.2mM.csv')
@@ -134,24 +134,23 @@ auc_0.2mM <- ggplot(gc_rename, aes(x = sample, y = auc_l, fill = sample)) +
                     values = colours,
                     labels = x_names) +
   
-  #
-  theme_minimal(base_size = 12) +
+  theme_minimal(base_size = 14) +
   theme(
     panel.grid.major.x = element_blank(),   
     panel.border = element_rect(fill = NA, color = "black", linewidth = 0.5), # Add border
     axis.text.x = element_blank(),
-    axis.text.y = element_text(size = 11),
-    axis.title.y = element_text(size = 12, margin = margin(r = 10)),
+    axis.title.y = element_text(margin = margin(r = 10)),
     plot.margin = margin(10, 10, 10, 10)     # Adjust plot margins
   ) 
 auc_0.2mM
 
 #plot growth curves
 growth_curve_0.2mM <- ggplot(data2_clean) +
-  geom_line(aes(x = time, y = od, colour = strain)) +
+  geom_line(aes(x = time, y = od, colour = strain), linewidth = 0.9) +
   xlab('Time (minutes)') +
   ylab('Optical density at 600nm') +
   labs(colour = 'Strain') +
+  theme(text=element_text(size=14)) +
   scale_colour_discrete(type = colours,
                         labels = x_names)
 growth_curve_0.2mM

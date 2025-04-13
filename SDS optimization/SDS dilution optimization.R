@@ -6,7 +6,7 @@
 library(tidyverse)
 
 #read data
-data <- read_csv('all growth curves - SDS optimization.csv')
+data <- read_csv('SDS optimization/all growth curves - SDS optimization.csv')
 
 #clean data
 data_clean <- data |>
@@ -19,14 +19,15 @@ data_clean <- data |>
   gather(concentration, od, -time)
 
 legend <- c('W5' = '5%', 'W2.5' = '2.5%', 'W1' = '1%', 'W0.5' = '0.5%', 'W0' = '0%')
-colours <- c('W5' = 'red', 'W2.5' = 'orange', 'W1' = 'green', 'W0.5' = 'blue', 'W0' = 'violet')
+colours <- c('W5' = '#56B4E9', 'W2.5' = '#D55E00', 'W1' = '#009E73', 'W0.5' = '#0072B2', 'W0' = '#CC79A7')
 
 #plot curves
 growth_curve_sds <- ggplot(data_clean) +
-  geom_line(aes(x = time, y = od, colour = concentration)) +
+  geom_line(aes(x = time, y = od, colour = concentration), linewidth = 0.9) +
   xlab('Time (minutes)') +
   ylab('Optical density at 600nm') +
   labs(colour = 'SDS concentration') +
+  theme(text=element_text(size=14)) +
   scale_colour_discrete(type = colours,
                         labels = legend)
 growth_curve_sds
