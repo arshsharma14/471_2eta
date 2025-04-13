@@ -1,4 +1,7 @@
 library(dplyr)
+library(ggplot2)
+library(ggsignif)
+
 
 # manually setting up small dataframe of uncleaved/cleaved ratios
 df <- data.frame(
@@ -26,3 +29,40 @@ summary(anova_strain)
 # Tukey's post-hoc test to identify specific differences:
 TukeyHSD(anova_strain)
 
+collapsed_df <- df %>%
+  group_by(strain) %>%
+  summarise(
+    mean_ratio = mean(ratio),
+    sd_ratio = sd(ratio),
+    .groups = "drop"
+  )
+
+plot <- ggplot(collapsed_df, aes(x = strain, y = mean_ratio, fill = strain)) +
+  geom_bar(stat = "identity", width = 0.7) +
+  geom_errorbar(aes(ymin = mean_ratio - sd_ratio, ymax = mean_ratio + sd_ratio),
+                width = 0.2) +
+  labs(
+    title = "",
+    x = "Strain",
+    y = "Uncleaved:Cleaved BrkA"
+  ) +
+  theme_minimal() +
+  theme(
+    text = element_text(size = 11),
+    plot.title = element_text(hjust = 0.5),
+    legend.position = "none"
+  )
+
+plot
+
+plot_final<- plot +
+  geom_signif(
+    annotations = c("*", "*"),
+    y_position = c(9.5, 11),  
+    xmin = c(1, 2),
+    xmax = c(3, 3),
+    tip_length = 0.05,
+    textsize = 4
+  ) + coord_cartesian(ylim = c(0, 12), clip = "off")
+
+plot_final
