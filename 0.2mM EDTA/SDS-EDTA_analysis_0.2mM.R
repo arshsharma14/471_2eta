@@ -1,10 +1,6 @@
 ### SDS-EDTA data analysis - 0.2mM EDTA
 
-#install and load necessary packages
-#install.packages('tidyverse') #uncomment if not installed
-#install.packages('growthcurver') #uncomment if not installed
-#install.packages('FSA') #uncomment if not installed
-#install.packages('ggsignif') #uncomment if not installed
+
 library(tidyverse)
 library(growthcurver)
 library(FSA)
@@ -20,7 +16,7 @@ colours <-c("WT" = "#009E73", "WTBrkA" = "#56B4E9",
             "Tropini" = "#CC79A7", "TropiniBrkA" = "#0072B2")
 
 #read data at 2mM EDTA
-data2 <- read_csv('0.2mM EDTA/all growth curves - 0.2mM.csv')
+data2 <- read_csv('all growth curves - 0.2mM.csv')
 
 #calculate technical replicate averages to get biological replicates
 data2_bioreps <- data2 |>
@@ -144,13 +140,44 @@ auc_0.2mM <- ggplot(gc_rename, aes(x = sample, y = auc_l, fill = sample)) +
   ) 
 auc_0.2mM
 
+data2_clean_30min <- data2_clean %>%
+  filter(time %% 30 == 0)
+
+dodge <- position_dodge(width = 5)
+
+
 #plot growth curves
 growth_curve_0.2mM <- ggplot(data2_clean) +
-  geom_line(aes(x = time, y = od, colour = strain), linewidth = 0.9) +
+  geom_line(aes(x = time, y = od, colour = strain), linewidth = 1.1, position = dodge) +
+  
+  geom_errorbar(
+    data = data2_clean_30min,
+    aes(x = time, ymin = od - sd, ymax = od + sd, colour = strain),
+    width = 8,
+    linewidth = 0.4,
+    alpha = 0.4
+  ) +
+  
   xlab('Time (minutes)') +
-  ylab('Optical density at 600nm') +
+  ylab('Optical density at 600 nm') +
   labs(colour = 'Strain') +
-  theme(text=element_text(size=14)) +
-  scale_colour_discrete(type = colours,
-                        labels = x_names)
+  scale_colour_discrete(type = colours, labels = x_names) +
+  
+  theme_minimal(base_size = 14) +
+  theme(
+    panel.grid.major.x = element_blank(),     # no vertical gridlines
+    panel.grid.minor.x = element_blank(),
+    panel.grid.major.y = element_line(color = "gray85", linewidth = 0.3),  # light horizontal gridlines
+    panel.grid.minor.y = element_blank(),
+    panel.background = element_blank(),
+    plot.background = element_blank(),
+    axis.line = element_line(color = "black", linewidth = 0.5),
+    axis.ticks = element_line(color = "black"),
+    axis.text = element_text(color = "black", size = 12),
+    axis.title = element_text(size = 14),
+    legend.title = element_text(size = 14),
+    legend.text = element_text(size = 12),
+    plot.margin = margin(10, 10, 10, 10)
+  )
+  
 growth_curve_0.2mM
