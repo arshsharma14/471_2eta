@@ -20,6 +20,10 @@ df <- df %>%
 print(df)
 
 # Run two-way ANOVA (strain and IPTG as factors)
+# strain = Do different strains have different mean ratios?
+# IPTG = Does IPTG induction change the ratio, overall?	
+# strain:IPTG = Does the effect of IPTG depend on the strain?	
+
 anova_results <- aov(ratio ~ strain * IPTG, data = df)
 summary(anova_results)
 
@@ -66,3 +70,15 @@ plot_final<- plot +
   ) + coord_cartesian(ylim = c(0, 12), clip = "off")
 
 plot_final
+
+df_2 <- df %>%
+  mutate(group = paste(strain, IPTG, sep = "_"))
+
+print(df_2)
+
+anova_group <- aov(ratio ~ group, data = df_2)
+summary(anova_group)
+
+tukey_results <- TukeyHSD(anova_group)
+print(tukey_results)
+
