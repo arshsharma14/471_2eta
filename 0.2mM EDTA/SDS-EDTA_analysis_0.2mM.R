@@ -167,7 +167,7 @@ growth_curve_0.2mM <- ggplot(data2_clean) +
   theme(
     panel.grid.major.x = element_blank(),     # no vertical gridlines
     panel.grid.minor.x = element_blank(),
-    panel.grid.major.y = element_line(color = "gray85", linewidth = 0.3),  # light horizontal gridlines
+    panel.grid.major.y = element_blank(),
     panel.grid.minor.y = element_blank(),
     panel.background = element_blank(),
     plot.background = element_blank(),
