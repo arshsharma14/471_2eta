@@ -159,7 +159,7 @@ growth_curve_0.2mM <- ggplot(data2_clean) +
   ) +
   
   xlab('Time (minutes)') +
-  ylab('Optical density at 600 nm') +
+  ylab('OD600') +
   labs(colour = 'Strain') +
   scale_colour_discrete(type = colours, labels = x_names) +
   
