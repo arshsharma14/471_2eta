@@ -25,7 +25,7 @@ colours <- c('W5' = '#56B4E9', 'W2.5' = '#D55E00', 'W1' = '#009E73', 'W0.5' = '#
 growth_curve_sds <- ggplot(data_clean) +
   geom_line(aes(x = time, y = od, colour = concentration), linewidth = 0.9) +
   xlab('Time (minutes)') +
-  ylab('Optical density at 600nm') +
+  ylab('OD600') +
   labs(colour = 'SDS concentration') +
   theme(text=element_text(size=14)) +
   scale_colour_discrete(type = colours,
