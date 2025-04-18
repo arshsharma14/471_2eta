@@ -2,11 +2,11 @@
 # Serial dilution was done for WT and mutant, but both gave similar results
 # Only WT data is plotted for simplicity
 
-#install.packages('tidyverse') #uncomment if not installed
+
 library(tidyverse)
 
 #read data
-data <- read_csv('SDS optimization/all growth curves - SDS optimization.csv')
+data <- read_csv('all growth curves - SDS optimization.csv')
 
 #clean data
 data_clean <- data |>
@@ -23,11 +23,33 @@ colours <- c('W5' = '#56B4E9', 'W2.5' = '#D55E00', 'W1' = '#009E73', 'W0.5' = '#
 
 #plot curves
 growth_curve_sds <- ggplot(data_clean) +
-  geom_line(aes(x = time, y = od, colour = concentration), linewidth = 0.9) +
+  
+  geom_line(aes(x = time, y = od, colour = concentration), linewidth = 1.1) +
+  
   xlab('Time (minutes)') +
-  ylab('OD600') +
+  ylab('Optical density at 600 nm') +
   labs(colour = 'SDS concentration') +
-  theme(text=element_text(size=14)) +
-  scale_colour_discrete(type = colours,
-                        labels = legend)
+  
+  scale_colour_manual(values = colours, labels = legend) +
+  
+  scale_y_continuous(
+    breaks = seq(0, 1.25, by = 0.25),
+    expand = expansion(mult = c(0.05, 0.05))
+  ) +
+  
+  theme_minimal(base_size = 14) +
+  theme(
+    panel.grid.major.x = element_blank(),
+    panel.grid.major.y = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.background = element_blank(),
+    plot.background = element_blank(),
+    axis.line = element_line(color = "black", linewidth = 0.5),
+    axis.ticks = element_line(color = "black"),
+    axis.text = element_text(color = "black", size = 12),
+    axis.title = element_text(size = 14),
+    legend.title = element_text(size = 14),
+    legend.text = element_text(size = 12),
+    plot.margin = margin(10, 10, 10, 10)
+  )
 growth_curve_sds

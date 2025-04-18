@@ -1,7 +1,6 @@
 ### supplemental growth curve - Tropini + BrkA
 
-#install and load necessary packages
-#install.packages('tidyverse') #uncomment if not installed
+
 
 library(tidyverse)
 
@@ -11,7 +10,7 @@ x_names <- c("0% SDS + 0mM EDTA", "0.01% SDS + 0mM EDTA", "0.01% SDS + 0.2mM EDT
 colours <-c("#0072B2", "#009E73", "#D55E00", "#CC79A7")
 
 #read data
-tropinibrka <- read_csv('supp_TropiniBrkA/all growth curves - TropiniBrkA.csv')
+tropinibrka <- read_csv('all growth curves - TropiniBrkA.csv')
 
 #calculate technical replicate averages to get biological replicates
 tropinibrka_bioreps <- tropinibrka |>
@@ -58,11 +57,36 @@ tropinibrka_clean$conc <- factor(tropinibrka_clean$conc, levels = x_order)
 
 #plot growth curves
 growth_curve_tropinibrka <- ggplot(tropinibrka_clean) +
-  geom_line(aes(x = time, y = od, colour = conc), linewidth = 0.9) +
+  
+  geom_line(aes(x = time, y = od, colour = conc), linewidth = 1.1) +
+  
   xlab('Time (minutes)') +
-  ylab('Optical density at 600nm') +
+  ylab('Optical density at 600 nm') +
   labs(colour = 'Experimental Condition') +
-  theme(text=element_text(size=14)) +
-  scale_colour_discrete(type = colours,
-                        labels = x_names)
+  
+  scale_colour_manual(values = colours, labels = x_names) +
+  
+  scale_y_continuous(
+    breaks = seq(0, 1.25, by = 0.25),
+    expand = expansion(mult = c(0.05, 0.05))
+  ) +
+  
+  theme_minimal(base_size = 14) +
+  theme(
+    panel.grid.major.x = element_blank(),
+    panel.grid.major.y = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.background = element_blank(),
+    plot.background = element_blank(),
+    axis.line = element_line(color = "black", linewidth = 0.5),
+    axis.ticks = element_line(color = "black"),
+    axis.text = element_text(color = "black", size = 12),
+    axis.title = element_text(size = 14),
+    legend.title = element_text(size = 14),
+    legend.text = element_text(size = 12),
+    plot.margin = margin(10, 10, 10, 10)
+  )
+
 growth_curve_tropinibrka
+
+
