@@ -59,15 +59,31 @@ plot <- ggplot(collapsed_df, aes(x = strain, y = mean_ratio, fill = strain)) +
 
 plot
 
-plot_final<- plot +
+plot_final <- plot +
   geom_signif(
     annotations = c("*", "*"),
     y_position = c(9.5, 11),  
     xmin = c(1, 2),
     xmax = c(3, 3),
     tip_length = 0.05,
-    textsize = 4
-  ) + coord_cartesian(ylim = c(0, 12), clip = "off")
+    textsize = 5
+  ) +
+  coord_cartesian(ylim = c(0, 12), clip = "off") +
+  scale_fill_manual(values = c(
+    "#E69F00",  # orange
+    "#56B4E9",  # sky blue
+    "#009E73"   # bluish green
+  )) +
+  theme_minimal(base_size = 14) +
+  theme(
+    panel.grid = element_blank(),   
+    panel.border = element_rect(fill = NA, color = "black", linewidth = 0.5),
+    axis.text.x = element_text(color = "black"),
+    axis.title.y = element_text(margin = margin(r = 10)),
+    plot.margin = margin(10, 10, 10, 10),
+    legend.position = "none"
+  )
+
 
 plot_final
 
