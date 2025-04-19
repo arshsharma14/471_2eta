@@ -19,6 +19,7 @@ data_clean <- data |>
   gather(concentration, od, -time)
 
 legend <- c('W5' = '5%', 'W2.5' = '2.5%', 'W1' = '1%', 'W0.5' = '0.5%', 'W0' = '0%')
+legend_updated  <- c('W5' = '0.05%', 'W2.5' = '0.025%', 'W1' = '0.01%', 'W0.5' = '0.005%', 'W0' = '0%')
 colours <- c('W5' = '#56B4E9', 'W2.5' = '#D55E00', 'W1' = '#009E73', 'W0.5' = '#0072B2', 'W0' = '#CC79A7')
 
 #plot curves
@@ -30,7 +31,7 @@ growth_curve_sds <- ggplot(data_clean) +
   ylab('Optical density at 600 nm') +
   labs(colour = 'SDS concentration') +
   
-  scale_colour_manual(values = colours, labels = legend) +
+  scale_colour_manual(values = colours, labels = legend_updated) +
   
   scale_y_continuous(
     breaks = seq(0, 1.25, by = 0.25),
