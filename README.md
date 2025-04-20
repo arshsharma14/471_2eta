@@ -5,9 +5,9 @@ This GitHub compiles the data and R scripts used to perform growth curve analysi
 ## Abbreviations
 | Abbreviation     | Description |
 |------------------|-------------|
-| **WT**           | *E. coli* BW25113 (wild type) |
-| **Oliver**       | JW0052 from Oliver MICB 471 lab (misannotated ΔsurA) |
-| **Tropini**      | JW0052 from Tropini lab (misannotated ΔsurA) |
+| **WT**           | *E. coli* BW25113 (wildtype) |
+| **Oliver**       | JW0052 from Oliver MICB 471 lab (annotated ΔsurA) |
+| **Tropini**      | JW0052 from Tropini lab (annotated ΔsurA) |
 | **WTBrkA**       | WT transformed with pPALMC1 (BrkA-expressing plasmid) |
 | **OliverBrkA**   | Oliver strain transformed with pPALMC1 |
 | **TropiniBrkA**  | Tropini strain transformed with pPALMC1 |
