@@ -158,13 +158,13 @@ growth_curve_0.2mM <- ggplot(data2_clean) +
     alpha = 0.4
   ) +
   
+  # 👇 This dummy point expands the y-axis without squishing x
+  geom_blank(data = data.frame(time = 0, od = 1.25), aes(x = time, y = od)) +
+  
   xlab('Time (minutes)') +
   ylab('Optical density at 600 nm') +
   labs(colour = 'Strain') +
   scale_colour_discrete(type = colours, labels = x_names) +
-  
-  
-  coord_cartesian(ylim = c(0, 1.25)) +
   
   scale_y_continuous(
     breaks = seq(0, 1.25, by = 0.25),
@@ -189,3 +189,5 @@ growth_curve_0.2mM <- ggplot(data2_clean) +
   )
   
 growth_curve_0.2mM
+ggsave("testing5.png", plot = growth_curve_0.2mM, width = 19.21, height = 9.63, units = "cm", dpi = 300)
+
