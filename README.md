@@ -3,10 +3,14 @@
 This GitHub compiles the data and R scripts used to perform growth curve analysis and Western blot densitometry for the purpose of reproducibility. See R script for detailed comments.
 
 ## Abbreviations
-- WT: E. coli BW25113
-- Oliver: E. coli JW0052 from Oliver Micb 471 lab
-- Tropini: E. coli JW0052 from Tropini lab
-- WTBrkA, OliverBrkA, TropiniBrkA: respective strains transformed with pPALMC1, expressing BrkA
+| Abbreviation     | Description |
+|------------------|-------------|
+| **WT**           | *E. coli* BW25113 (wild type) |
+| **Oliver**       | JW0052 from Oliver MICB 471 lab (misannotated ΔsurA) |
+| **Tropini**      | JW0052 from Tropini lab (misannotated ΔsurA) |
+| **WTBrkA**       | WT transformed with pPALMC1 (BrkA-expressing plasmid) |
+| **OliverBrkA**   | Oliver strain transformed with pPALMC1 |
+| **TropiniBrkA**  | Tropini strain transformed with pPALMC1 |
 
 ## Plate reader runs
 Biological replicates and optimization performed as follows:
