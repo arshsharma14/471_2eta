@@ -2,7 +2,7 @@
 # Serial dilution was done for WT and mutant, but both gave similar results
 # Only WT data is plotted for simplicity
 
-
+#load relevant library
 library(tidyverse)
 
 #read data
